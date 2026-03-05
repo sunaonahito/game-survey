@@ -246,9 +246,6 @@ function App(){
       <div style={{fontSize:48,marginBottom:16}}>✓</div>
       <h2 style={{fontFamily:"'Noto Serif JP',serif",fontSize:22,color:P.pri,marginBottom:12}}>ご回答ありがとうございました</h2>
       <p style={{fontSize:15,color:P.mut,lineHeight:1.8,maxWidth:400,margin:"0 auto 20px"}}>{view==="pre"?"ゲーム体験前のご質問への回答が完了しました。データは正常に記録されました。":"ゲーム体験後のご質問への回答が完了しました。ご協力ありがとうございました。"}</p>
-      {gs&&gs!=="skipped"&&<div style={{display:"inline-flex",alignItems:"center",gap:8,padding:"10px 20px",borderRadius:8,fontSize:13,marginBottom:20,background:gs==="success"?"rgba(52,168,83,0.15)":"rgba(240,112,112,0.15)",color:gs==="success"?"#6ECF8A":P.err,border:`1px solid ${gs==="success"?"rgba(52,168,83,0.3)":"rgba(240,112,112,0.3)"}`}}>
-        {gs==="success"?<>✓ Google スプレッドシートに送信しました</>:<>⚠ 送信に失敗しました。研究者にお知らせください。</>}
-      </div>}
       <div><button onClick={reset} style={{padding:"12px 32px",background:"transparent",color:P.pri,border:`2px solid ${P.pri}`,borderRadius:8,fontSize:14,cursor:"pointer",fontWeight:600,transition:"all 0.2s"}}
         onMouseEnter={e=>{e.target.style.background=P.pri;e.target.style.color="#fff"}} onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color=P.pri}}>トップに戻る</button></div>
     </div>
