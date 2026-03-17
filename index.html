@@ -215,7 +215,7 @@ function CodeGen({value,onChange,isPost}){
         </div>
         <div style={{flex:1,minWidth:160}}>
           {code
-            ?<p style={{fontSize:12,color:P.mut,margin:0,lineHeight:1.7}}>{isPost?"このコードが事前アンケートと一致していることを確認してください。":"このコードを事後アンケートでも使用します。記録しておく必要はありません。"}</p>
+            ?<p style={{fontSize:12,color:P.mut,margin:0,lineHeight:1.7}}>{isPost?"このコードが事前アンケートと一致していることを確認してください。":<span>このコードはゲームの体験や事後アンケートでも使用します。<br/>記録しておいてください。</span>}</p>
             :<p style={{fontSize:12,color:P.mut,margin:0,lineHeight:1.7}}>残り <strong style={{color:P.acc}}>{5-filled}</strong> 項目を入力するとコードが完成します。</p>
           }
         </div>
