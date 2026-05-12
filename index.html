@@ -115,6 +115,33 @@
       open: [{ id: "q53", type: "textarea", label: "今回ご体験いただいたゲームや、それに伴う一連の活動に対するご感想・ご意見をお聞かせください。", ph: "自由にご記入ください" }],
     };
 
+    // --- Shuffle utilities ---
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function getShuffledItems(key, items) {
+      try {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          const order = JSON.parse(saved);
+          if (Array.isArray(order) && order.length === items.length) {
+            return order.map(i => items[i]);
+          }
+        }
+        const indices = shuffleArray(items.map((_, i) => i));
+        localStorage.setItem(key, JSON.stringify(indices));
+        return indices.map(i => items[i]);
+      } catch (e) {
+        return shuffleArray(items);
+      }
+    }
+
     // --- Send to Google Sheets ---
     async function sendToSheets(type, answers, ts) {
       if (!GAS_URL) return { skipped: true };
@@ -156,12 +183,13 @@
       </div>;
     }
 
-    function SS({ section, answers, set }) {
+    function SS({ section, storageKey, answers, set }) {
+      const [items] = useState(() => getShuffledItems(storageKey, section.items));
       return <div style={{ marginBottom: 32 }}>
         <div style={{ background: "linear-gradient(90deg,#1E3A6E,#2B5EA7)", color: "#fff", padding: "16px 24px", borderRadius: "10px 10px 0 0", fontFamily: "'Noto Serif JP',serif" }}><h2 style={{ margin: 0, fontSize: 17, fontWeight: 600 }}>{section.title}</h2></div>
         <div style={{ background: P.card, border: `1px solid ${P.bdr}`, borderTop: "none", borderRadius: "0 0 10px 10px", padding: "8px 24px 16px" }}>
           <p style={{ fontSize: 14, color: "#fff", lineHeight: 1.8, margin: "12px 0 8px" }}>{section.inst}</p>
-          {section.items.map(it => <SQ key={it.id} item={it} scale={section.scale} value={answers[it.id]} onChange={v => set(it.id, v)} />)}
+          {items.map(it => <SQ key={it.id} item={it} scale={section.scale} value={answers[it.id]} onChange={v => set(it.id, v)} />)}
         </div>
       </div>;
     }
@@ -463,15 +491,15 @@
           </div>
 
           {isPre ? <>
-            <div id="f-q10"><SS section={PRE.swls} answers={ans} set={sa} /></div>
-            <div id="f-q18"><SS section={PRE.cses} answers={ans} set={sa} /></div>
-            <div id="f-q31"><SS section={PRE.srgs} answers={ans} set={sa} /></div>
-            <div id="f-q46"><SS section={PRE.apts} answers={ans} set={sa} /></div>
+            <div id="f-q10"><SS section={PRE.swls} storageKey="survey_order_pre_swls" answers={ans} set={sa} /></div>
+            <div id="f-q18"><SS section={PRE.cses} storageKey="survey_order_pre_cses" answers={ans} set={sa} /></div>
+            <div id="f-q31"><SS section={PRE.srgs} storageKey="survey_order_pre_srgs" answers={ans} set={sa} /></div>
+            <div id="f-q46"><SS section={PRE.apts} storageKey="survey_order_pre_apts" answers={ans} set={sa} /></div>
           </> : <>
-            <div id="f-q2"><SS section={POST.swls} answers={ans} set={sa} /></div>
-            <div id="f-q10"><SS section={POST.cses} answers={ans} set={sa} /></div>
-            <div id="f-q23"><SS section={POST.srgs} answers={ans} set={sa} /></div>
-            <div id="f-q38"><SS section={POST.arcs} answers={ans} set={sa} /></div>
+            <div id="f-q2"><SS section={POST.swls} storageKey="survey_order_post_swls" answers={ans} set={sa} /></div>
+            <div id="f-q10"><SS section={POST.cses} storageKey="survey_order_post_cses" answers={ans} set={sa} /></div>
+            <div id="f-q23"><SS section={POST.srgs} storageKey="survey_order_post_srgs" answers={ans} set={sa} /></div>
+            <div id="f-q38"><SS section={POST.arcs} storageKey="survey_order_post_arcs" answers={ans} set={sa} /></div>
             <div style={{ marginBottom: 32 }}>
               <div style={{ background: "linear-gradient(90deg,#1E3A6E,#2B5EA7)", color: "#fff", padding: "16px 24px", borderRadius: "10px 10px 0 0", fontFamily: "'Noto Serif JP',serif" }}><h2 style={{ margin: 0, fontSize: 17, fontWeight: 600 }}>§5.</h2></div>
               <div style={{ background: P.card, border: `1px solid ${P.bdr}`, borderTop: "none", borderRadius: "0 0 10px 10px", padding: "8px 24px 16px" }}>
