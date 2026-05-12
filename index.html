@@ -166,12 +166,12 @@
       </div>;
     }
 
-    function SQ({ item, scale, value, onChange }) {
+    function SQ({ item, scale, value, onChange, displayNum }) {
       const n = scale.max - scale.min + 1;
       const vals = Array.from({ length: n }, (_, i) => scale.min + i);
       const lFirst = scale.labels[0]; const lLast = scale.labels[n - 1];
       return <div style={{ padding: "20px 0", borderBottom: `1px solid ${P.bdr}` }}>
-        <p style={{ margin: "0 0 14px", fontSize: 15, color: P.txt, lineHeight: 1.7 }}><span style={{ color: P.acc, fontWeight: 600, marginRight: 8, fontSize: 13 }}>{item.id.toUpperCase()}</span>{item.t}</p>
+        <p style={{ margin: "0 0 14px", fontSize: 15, color: P.txt, lineHeight: 1.7 }}><span style={{ color: P.acc, fontWeight: 600, marginRight: 8, fontSize: 13 }}>{displayNum}.</span>{item.t}</p>
         <div style={{ maxWidth: Math.min(n * 56, 620) }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             {vals.map((v, i) => {
@@ -198,7 +198,7 @@
           {section.scaleNote && <div style={{ display: "flex", flexDirection: "column", gap: 2, fontSize: 12, color: P.mut, background: P.secBg, borderRadius: 6, padding: "8px 12px", margin: "0 0 8px" }}>
             {section.scaleNote.map((n, i) => <span key={i}>{n}</span>)}
           </div>}
-          {items.map(it => <SQ key={it.id} item={it} scale={section.scale} value={answers[it.id]} onChange={v => set(it.id, v)} />)}
+          {items.map((it, idx) => <SQ key={it.id} item={it} scale={section.scale} value={answers[it.id]} onChange={v => set(it.id, v)} displayNum={idx + 1} />)}
         </div>
       </div>;
     }
